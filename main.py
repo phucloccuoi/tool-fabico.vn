@@ -2,7 +2,6 @@
 from os import system, name, path
 import fahasa_crawler
 import handing_file
-import request_page
 import call_api_fabico
 
 # Clear function
@@ -48,6 +47,7 @@ def crawler():
     listBarcodeCrawler_InFileName = input('\\_Please enter file name of barcode input list name want to get data> ')
     listBarcodeCrawler_OutFileName = input('\\_Please enter file name of barcode output list name want to get data> ')
 
+    # 
     while path.isfile("Data\\" + listBarcodeCrawler_InFileName + ".txt") != 1:
         print('\\_There is no file you requested!!!')
         listBarcodeCrawler_InFileName = input('\\_Please RE-ENTER the barcode input name of the list you want to get data> ')
@@ -57,8 +57,10 @@ def crawler():
     # Khởi tạo biến bắt đầu vòng lặp
     indexList = 0
 
+    fahasa_crawler.write_header_to_file("Data\\" + listBarcodeCrawler_OutFileName + ".csv")
+
     for Prod in listProduct:
-        fahasa_crawler.write_info_to_file(Prod, listBarcodeCrawler_OutFileName + ".csv", indexList)
+        fahasa_crawler.write_info_to_file(Prod, "Data\\" + listBarcodeCrawler_OutFileName + ".csv", indexList)
         indexList += 1
 
     return 1
@@ -67,9 +69,9 @@ def crawler():
 # check duplication function
 def check_Duplication():
 
+    secretToken = input('\\_Please enter the secret token haravan> ')
     checkDup_FileName = input('\\_Please enter barcode input list name want to check> ')
     noneDup_FileName = input('\\_Please enterbarcode output list name want to check> ')
-    url_fabico = "https://www.fabico.vn/search?type=product&q="
 
     while path.isfile("Data\\" + checkDup_FileName + ".txt") != 1:
         print('\\_There is no file you requested!!!')
@@ -80,8 +82,9 @@ def check_Duplication():
     print('--CHECK IN STARTS FABICO--')
 
     # Gọi hàm kiểm tra sản phẩm fabico và ghi vào file
-    list_not_Found_Fabico = request_page.check_products_has_not(list_barcode_first_filter, url_fabico, 'span.collection-size', '(0 sản phẩm)', 'fabico') # FABICO
+    list_not_Found_Fabico = call_api_fabico.check_products_duplication(list_barcode_first_filter, secretToken)
     handing_file.write_list_to_file(list_not_Found_Fabico, len(list_not_Found_Fabico), "Data\\" + noneDup_FileName + ".txt")
+    
 
     print("-------FINISH--------")
     return 1

@@ -6,7 +6,7 @@ def split_big_str(input_string, str_slit, num_sub_str, remove_newline):
     Function: chia nhỏ chuỗi lớn thành các chuỗi con và cho vào dánh sách
     - input_string: Chuỗi đầu vào cần được chia nhỏ
     - str_slit: Chuỗi phân cách giữa các chuỗi con
-    - num_sub_str: Số thứ tự
+    - num_sub_str: Số lượng muốn tách
     - remove_newline: Nếu =1 thì sẽ xóa ký tự xuống dòng cuỗi dòng
     Return: Danh sách các chuỗi con
     '''
@@ -19,7 +19,7 @@ def split_big_str(input_string, str_slit, num_sub_str, remove_newline):
         temp = temp.rstrip("\n")
         list_sub_string[num_sub_str] = temp
 
-    return str(list_sub_string)
+    return list_sub_string
 # Kết thúc hàm chia nhỏ chuỗi lớn thành các chuỗi con
 
 # Hàm thay thế các chuỗi thẻ html

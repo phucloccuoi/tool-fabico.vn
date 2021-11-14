@@ -70,7 +70,10 @@ def update_Prod(listProd_ID, headerToken):
         count += 1
         sleep(1)
     
-    return 1
+    if respone.status_code == 200:
+        return 1
+    else:
+        return -1
 # end update products
 
 # delete products function
@@ -93,5 +96,48 @@ def delete_Prod(listProd_ID, headerToken):
         count += 1
         sleep(1)
     
-    return 1
+    if respone.status_code == 200:
+        return 1
+    else:
+        return -1
 # end delete products
+
+# Hàm kiểm tra sản phẩm có trên website hay không
+def check_products_duplication(listBarcode, headerToken):
+
+    listProd_Duplication = []
+    count = 1
+    headerFabico = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {headerToken}'
+    }
+
+    # Tìm kiếm từng sản phẩm
+    for barcode in listBarcode:
+        # Truy cập vào trang tìm kiếm sản phẩm
+        try:
+            respone = requests.get(url=f'https://www.fabico.vn/search?type=product&q={barcode}', headers=headerFabico)
+        except AttributeError:
+            return -1
+
+        payload = respone.text
+
+        # Tách chuỗi làm đôi
+        payload = payload.split('collection-size')
+
+        # Lấy ký tự chứa số lượng sản phẩm trên website
+        result =  payload[1][3:4]
+
+        
+        if result == '0':
+            print(f"_Product {count} is hiding!")
+        elif result != '1':
+            listProd_Duplication.append(barcode)
+            print('_There are ' + result + ' products')
+        else:
+            print(f"_Product {count} not duplicated!")
+        sleep(1)
+        count += 1
+
+    return listProd_Duplication
+# Kết thúc hàm kiểm tra sản phẩm trên website

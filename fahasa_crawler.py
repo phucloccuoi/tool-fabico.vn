@@ -2,7 +2,6 @@
 from datetime import datetime
 import csv
 import handing_string
-import handing_file
 import request_page
 
 # Hàm lấy ra tên sản phẩm
@@ -170,7 +169,7 @@ def write_info_to_file(strProdInList, fileName, indexList):
         inventory = handing_string.split_big_str(strProdInList, ",", 4, 1)[4]
 
         # Giá trị cho cột Mô tả
-        list_str = get_description(indexList, nameProduct)
+        list_str = get_description(indexList)
         # Kiểm tra xem có mô tả hay không, nếu không có thì ghi vào file lỗi
         if list_str == -1:
             print('>>> No products found!')
@@ -197,7 +196,7 @@ def write_info_to_file(strProdInList, fileName, indexList):
         number_imgages = len(get_all_links_images_product(indexList))
 
         # Giá trị cột giá của sản phẩm
-        price_product = handing_file.get_info_from_file(indexList, 1)
+        price_product = handing_string.split_big_str(strProdInList, ",", 4, 1)[1]
     #------------------------Kết thúc khu vực kiểm tra các biến gán đầu vào-----------------------##
 
         # Mở file output.csv và ghi các giá trị thu thập vào file
